@@ -30,7 +30,10 @@ class YamlReader:
         matchid = get_id(myfile)
         #print data['info'].keys()
         data = defaultdict(str,data)
-        venue_city = data['info']['city']
+        if 'city' in data['info']:
+            venue_city = data['info']['city']
+        else:
+            venue_city = None
         date = data['info']['dates'][0]
         match_type = data['info']['match_type']
         gender = data['info']['gender']
