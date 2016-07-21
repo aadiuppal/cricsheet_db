@@ -39,9 +39,15 @@ class YamlReader:
         umpire1,umpire2,umpire3 = get_umpires(data['info']['umpires'])
         toss_winner = data['info']['toss']['winner']
         toss_decision = data['info']['toss']['decision']
-        winner = data['info']['outcome']['winner']
+        if 'winner' in data['info']['outcome']:
+            winner = data['info']['outcome']['winner']
+        else:
+            winner = data['info']['outcome']['result']
         win_by = get_win_details(data['info']['outcome'])
-        max_overs= data['info']['overs']
+        if 'overs' in data['info']:
+            max_overs = data['info']['overs']
+        else:
+            max_overs = None
         if 'player_of_match' in data['info']:
             player_of_match =  data['info']['player_of_match'][0]
         else:

@@ -6,7 +6,7 @@ from sql_declare import Match,Base,Details
 import glob
 from yaml_read import YamlReader
 
-engine = create_engine('sqlite:////home/aaditya/Desktop/code/my_git/cricsheet_db/cricsheet_data.db')
+engine = create_engine('sqlite:///cricsheet_data.db')
 Base.metadata.create_all(engine)
 Base.metadata.bind  = engine
 
@@ -17,10 +17,11 @@ session = DBSession()
 yaml_reader = YamlReader()
 count = 1
 
-
+debug = True
 
 def update_match_data(match_data):
-    print match_data[0]
+    if debug:
+        print "Adding into db matchid:",match_data[0]
     tmp = session.query(Match).filter(Match.matchid == match_data[0]).all()
     if tmp and tmp[0].matchid == int(match_data[0]):
         return tmp
@@ -46,6 +47,8 @@ def update_match_data(match_data):
     return match
 
 def update_ball_details(count,ball_data,match):
+    if debug:
+        print "Adding into db balls",count,"for matchid:",ball_data[0]
     tmp = session.query(Details).filter(Details.id == count).all()
     if tmp and tmp[0].id == count:
         return tmp
@@ -72,10 +75,18 @@ def update_ball_details(count,ball_data,match):
 data_files = glob.glob('data/*.yaml')
 
 for myfile in data_files:
+    if debug:
+        print "Reading file",myfile
     match_data = yaml_reader.getMatchDetails(myfile)
+    if debug:
+        print "Updating into db"
     match = update_match_data(match_data)
+    if debug:
+        print "Getting ball details from",myfile
     ball_details = yaml_reader.getBallDetails(myfile)
     for ball in ball_details:
+        if debug:
+            print "Updating ball",count,"into db"
         update_ball_details(count,ball,match)
         count += 1
 
