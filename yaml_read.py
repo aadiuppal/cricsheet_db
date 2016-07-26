@@ -33,7 +33,7 @@ class YamlReader:
         if 'city' in data['info']:
             venue_city = data['info']['city']
         else:
-            venue_city = None
+            venue_city = ""
         date = data['info']['dates'][0]
         match_type = data['info']['match_type']
         gender = data['info']['gender']
